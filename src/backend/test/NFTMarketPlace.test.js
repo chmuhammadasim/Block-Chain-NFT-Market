@@ -28,6 +28,11 @@ describe('NFTMarketPlace', function()  {
             expect(await nft.tokenCount()).equal(1);
             expect(await nft.balanceOf(addr1.address)).equal(1);
             expect(await nft.tokenURI(1)).equal(URI);
+
+            await nft.connect(addr2).mint(URI); 
+            expect(await nft.tokenCount()).equal(2);
+            expect(await nft.balanceOf(addr2.address)).equal(1);
+            expect(await nft.tokenURI(2)).equal(URI);
         })
     })
 })
