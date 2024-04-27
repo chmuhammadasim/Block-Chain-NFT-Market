@@ -47,6 +47,18 @@ describe('NFTMarketPlace', function()  {
             await expect(marketplace.connect(addr1).makeItem(nft.address,1,toWei(1)))
             .emit(marketplace,"Offered")
             .withArgs(1,nft.address,1,toWei(1),addr1.address);
-        })
-    })
-})
+            expect(await nft.ownerOf(1)).equal(marketplace.address);
+            const item = await marketplace.items(1);
+            expect(item.itemId).equal(1);
+            expect(item.nft).equal(nft.address);
+            expect(item.tokenId).equal(1);
+            expect(item.price).equal(toWei(1));
+            expect(item.sold).equal(false);
+        });
+        it("should Fail is Price is Set to Zero",  function() {
+            expect(
+                marketplace.connect(addr1).makeItem(nft.address, 1, 0)
+            ).to.be.revertedWith("Price Must Be Greater than Zero");
+        });
+    });
+});
