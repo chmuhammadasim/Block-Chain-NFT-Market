@@ -35,4 +35,10 @@ describe('NFTMarketPlace', function()  {
             expect(await nft.tokenURI(2)).equal(URI);
         })
     })
+    describe('Making MarketPlace Items', function() {
+        beforeEach(async function() {
+            await nft.connect(addr1).mint(URI);
+            await nft.connect(addr1).setApprovalForAll(marketplace.address,true);
+        })
+    })
 })
