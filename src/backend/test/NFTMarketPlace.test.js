@@ -1,6 +1,9 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
+const toWei = (num) => ethers.utils.parseEther(num.toString());
+const fromWei = (num) => ethers.utils.formatEther(num); 
+
 describe('NFTMarketPlace', function()  { 
     let deployer, addr1, addr2, nft, marketplace;
     let feePercent = 1;
@@ -39,6 +42,11 @@ describe('NFTMarketPlace', function()  {
         beforeEach(async function() {
             await nft.connect(addr1).mint(URI);
             await nft.connect(addr1).setApprovalForAll(marketplace.address,true);
+        })
+        it('Should Track Newly Created Item, Tranfer NFT from Seller to Market Place and Emit Offered event', async function() {
+            await expect(marketplace.connect(addr1).makeItem(nft.address,1,toWei(1)))
+            .emit(marketplace,"Offered")
+            .withArgs(1,nft.address,1,toWei(1),addr1.address);
         })
     })
 })
