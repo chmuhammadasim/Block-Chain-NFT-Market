@@ -55,10 +55,10 @@ describe('NFTMarketPlace', function()  {
             expect(item.price).equal(toWei(1));
             expect(item.sold).equal(false);
         });
-        it("should Fail is Price is Set to Zero",  function() {
-            expect(
+        it("should fail if price is set to zero", async () => {
+            await expect(
                 marketplace.connect(addr1).makeItem(nft.address, 1, 0)
-            ).to.be.revertedWith("Price Must Be Greater than Zero");
-        });
+            ).rejects.toThrow("Price Must Be Greater than Zero");
+        });              
     });
 });
