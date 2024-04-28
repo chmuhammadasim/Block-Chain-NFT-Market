@@ -1,3 +1,4 @@
+/* eslint-disable jest/valid-expect */
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
@@ -47,18 +48,21 @@ describe('NFTMarketPlace', function()  {
             await expect(marketplace.connect(addr1).makeItem(nft.address,1,toWei(1)))
             .emit(marketplace,"Offered")
             .withArgs(1,nft.address,1,toWei(1),addr1.address);
+
             expect(await nft.ownerOf(1)).equal(marketplace.address);
             const item = await marketplace.items(1);
+
             expect(item.itemId).equal(1);
             expect(item.nft).equal(nft.address);
             expect(item.tokenId).equal(1);
             expect(item.price).equal(toWei(1));
             expect(item.sold).equal(false);
         });
-        it("should fail if price is set to zero", async () => {
+        it("should fail if price is set to zero", async function() {
             await expect(
                 marketplace.connect(addr1).makeItem(nft.address, 1, 0)
-            ).rejects.toThrow("Price Must Be Greater than Zero");
-        });              
+            ).to.be.revertedWith("Price must be greater than 0");
+        });
+                     
     });
 });
