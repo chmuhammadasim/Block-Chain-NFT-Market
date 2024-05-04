@@ -1,8 +1,31 @@
 
 import logo from './logo.png';
 import './App.css';
- 
+import { ethers } from 'ethers'
+import { useState } from 'react'; 
+import MarketplaceAbi from '../contractsData/Marketplace.json'
+import MarketplaceAddress from '../contractsData/Marketplace-address.json'
+import NFTAbi from '../contractsData/NFT.json'
+import NFTAddress from '../contractsData/NFT-address.json'
 function App() {
+  const [loading,setLoading] = useState(true);
+  const [account, setAccount] = useState(null);
+  const [marketplace, setMarketPlace] = useState({});
+  const [nft, setNFT] = useState({});
+  const web3Handler = async () => {
+    const account = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    setAccount(account);
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    loadContract(signer);
+  }
+  const loadContract = async (signer) => {
+    const marketplace = await ethers.Contract(MarketplaceAddress.address,MarketplaceAbi.abi, signer);
+    setMarketPlace(marketplace);
+    const nft = await ethers.Contract(NFTAddress.address,NFTAbi.abi, signer);
+    setNFT(nft);
+    setLoading(false);
+  }
   return (
     <div>
       <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
