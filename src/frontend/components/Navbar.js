@@ -1,6 +1,4 @@
-import {
-    Link
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Navbar, Nav, Button, Container } from 'react-bootstrap'
 import market from './market.png'
 
